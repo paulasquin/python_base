@@ -1,0 +1,50 @@
+version: '2.3'
+
+services:
+  # Defining the lab service
+  lab:
+    working_dir: /lab
+    command: bash -c "jupyter notebook --port=8888 --no-browser --ip=0.0.0.0 --allow-root"
+    image: ${IMAGE_TAG_GPU}
+    container_name: python-base-lab
+    runtime: nvidia
+    env_file:
+      - .env
+
+    # Define visibles GPU ids if multiple ones, as in servers for instance
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=0
+
+    # Shared volumes among Docker container and host machine
+    volumes:
+      - ${HOME}/.aws/config:/root/.aws/config:ro
+      - ${HOME}/.aws/credentials:/root/.aws/credentials:ro
+      - ./lab:/lab
+
+    # Map ports such as host:container
+    ports:
+      - "8888:8888"
+
+  # Defining simple bash service, here without GPU as example
+  bash:
+    command: /bin/bash
+    stdin_open: true
+    tty: true
+    image: ${IMAGE_TAG}
+    volumes:
+      - ${HOME}/.aws/config:/root/.aws/config:ro
+      - ${HOME}/.aws/credentials:/root/.aws/credentials:ro
+    env_file:
+      - .env
+
+  # Define pytest calling service and procedure
+  test:
+    image: ${IMAGE_TAG_GPU}
+    container_name: python-base-test
+    command: bash -c "pytest /app/tests"
+    volumes:
+      - ${HOME}/.aws/credentials:/root/.aws/credentials:ro
+    env_file:
+      - .env
+    stdin_open: true
+    tty: true

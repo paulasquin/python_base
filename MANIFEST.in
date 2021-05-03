@@ -1,0 +1,2 @@
+# Define data to join to the python package, such as html files for API rendering
+include path/to/file.html
