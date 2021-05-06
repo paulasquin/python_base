@@ -20,6 +20,7 @@ services:
       - ${HOME}/.aws/config:/root/.aws/config:ro
       - ${HOME}/.aws/credentials:/root/.aws/credentials:ro
       - ./lab:/lab
+      - ${HOME}/.jupyter/jupyter_notebook_config.json:/root/.jupyter/jupyter_notebook_config.json:ro
 
     # Map ports such as host:container
     ports:

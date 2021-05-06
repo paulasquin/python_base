@@ -1,11 +1,23 @@
 # GPU based Docker building instructions
 FROM nvidia/cuda:10.1-cudnn7-devel-ubuntu18.04
 
+# Or you can use this other GPU ready docker image with cuda enabled OpenCV
+# FROM paulasquin/ubuntu_gpu_cuda_opencv:latest
+
 # Basic dependencies
 RUN apt-get update && \
-    apt-get install -y cmake build-essential git python3 python3-distutils python3-pip
+    apt-get install -y cmake build-essential git python3 python3-distutils python3-pip python3-venv
 
-RUN pip3 install --upgrade pip
+# Init virtual env
+RUN python3 -m venv /opt/venv && \
+    . /opt/venv/bin/activate
+
+ENV PATH /opt/venv/bin:$PATH 
+RUN pip install --upgrade pip
+
+# Install project requirements
+COPY requirements.txt /tmp/requirements.txt
+RUN pip install -r /tmp/requirements.txt
 
 # Define workdir
 WORKDIR /app
@@ -14,7 +26,7 @@ WORKDIR /app
 COPY . .
 
 # Install package
-RUN pip3 install .
+RUN pip install .
 
 # Run commands, or bash
 CMD /bin/bash
