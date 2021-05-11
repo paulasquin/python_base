@@ -2,7 +2,7 @@
 Python projects base, to be packaged and deployed with ease.
 
 To know more about getting Docker, Docker Compose and Cuda working altogether, 
-see [https://github.com/paulasquin/documentation](github.com/paulasquin/documentation).
+see [github.com/paulasquin/documentation](https://github.com/paulasquin/documentation).
 You can follow all the steps from the beginning up to the jupyter password setting.
 
 # Docker
